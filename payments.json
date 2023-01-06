@@ -1,0 +1,62 @@
+[
+    {
+        "paymentAmount": 3958,
+        "paymentDate": "2021-02-01T00:00:00.000Z",
+        "id": "1"
+    },
+    {
+        "paymentAmount": 2340.38,
+        "paymentDate": "2021-03-01T00:00:00.000Z",
+        "id": "2"
+    },
+    {
+        "paymentDate": "2021-04-01T00:00:00.000Z",
+        "paymentAmount": 3029,
+        "id": "3"
+    },
+    {
+        "paymentAmount": 3421.38,
+        "paymentDate": "2021-05-01T00:00:00.000Z",
+        "id": "4"
+    },
+    {
+        "paymentAmount": 2859,
+        "paymentDate": "2021-06-01T00:00:00.000Z",
+        "id": "5"
+    },
+    {
+        "paymentDate": "2021-07-01T00:00:00.000Z",
+        "paymentAmount": 3302,
+        "id": "6"
+    },
+    {
+        "paymentAmount": 5321.28,
+        "paymentDate": "2021-08-01T00:00:00.000Z",
+        "id": "7"
+    },
+    {
+        "paymentAmount": 4523.18,
+        "paymentDate": "2021-09-01T00:00:00.000Z",
+        "id": "8"
+    },
+    {
+        "paymentDate": "2021-10-01T00:00:00.000Z",
+        "paymentAmount": 2930.27,
+        "id": "9"
+    },
+    {
+        "paymentAmount": 2523.25,
+        "paymentDate": "2021-11-01T00:00:00.000Z",
+        "id": "10"
+    },
+    {
+        "paymentAmount": 2525.25,
+        "paymentDate": "2021-12-01T00:00:00.000Z",
+        "id": "11"
+    },
+    {
+        "paymentDate": "2022-01-01T00:00:00.000Z",
+        "paymentAmount": 3535.35,
+        "id": "12"
+    }
+]
