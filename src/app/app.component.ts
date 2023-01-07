@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Payment } from './payment';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { MatDialog } from '@angular/material/dialog';
+import { MortgageInfoDialogComponent, MortgageInfoDialogResult } from './mortgage-info-dialog/mortgage-info-dialog.component';
 
 @Component({
   selector: 'app-root',
@@ -12,14 +14,37 @@ export class AppComponent {
   title = 'mortgage-payoff-tracker';
 
   mortgageInfo: any = {}
+  hasMortgageInfo: boolean = false;
 
   payments: Payment[] = []
 
-  constructor(private store: AngularFirestore) {
+  constructor(private store: AngularFirestore,
+              private dialog: MatDialog) {
     this.calculatePayments(this.payments);
-    this.getTrashData().subscribe((data: any) => {
-      console.log("trash data = " + JSON.stringify(data));
+    this.getMortgageInfo().subscribe((settings: any) => {
+      this.mortgageInfo = (settings === undefined) ? {} : settings;
+      this.hasMortgageInfo = (JSON.stringify(this.mortgageInfo) !== '{}');
     })
+  }
+
+  getMortgageInfo(): Observable<any> {
+    return this.store.collection('app.settings').doc('mortgage').valueChanges() as Observable<any>;
+  }
+
+  editMortgageInfo() {
+    const dialogRef = this.dialog.open(MortgageInfoDialogComponent, {
+      width: '350px',
+      data: { mortgage: this.mortgageInfo },
+    });
+    dialogRef.afterClosed()
+      .subscribe((result: MortgageInfoDialogResult | undefined) => {
+        if (!result) {
+          return;
+        }
+        result.mortgage['interestRate'] /= 100;
+        result.mortgage['currentPrincipal'] = result.mortgage.startingPrincipal;
+        this.store.collection('app.settings').doc('mortgage').set(result.mortgage);
+      })
   }
 
   getTrashData(): Observable<any> {

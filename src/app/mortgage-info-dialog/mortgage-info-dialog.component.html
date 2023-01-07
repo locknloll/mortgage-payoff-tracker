@@ -1,0 +1,32 @@
+<table>
+    <tr><td>
+        <mat-form-field>
+            <mat-label>Interest Rate</mat-label>
+            <input matInput type="number" [(ngModel)]="data.mortgage['interestRate']" />
+        </mat-form-field>
+    </td></tr>
+    <tr><td>
+        <mat-form-field>
+            <mat-label>Escrow Payment</mat-label>
+            <input matInput type="number" [(ngModel)]="data.mortgage['escrow']" />
+        </mat-form-field>
+    </td></tr>
+    <tr><td>
+        <mat-form-field>
+            <mat-label>Monthly Payment</mat-label>
+            <input matInput type="number" [(ngModel)]="data.mortgage['monthlyPayment']" />
+        </mat-form-field>
+    </td></tr>
+    <tr><td>
+        <mat-form-field>
+            <mat-label>Starting Principal</mat-label>
+            <input matInput type="number" [(ngModel)]="data.mortgage['startingPrincipal']" />
+        </mat-form-field>
+    </td></tr>
+    <tr><td>
+        <div mat-dialog-actions>
+            <button mat-raised-button [mat-dialog-close]="{ mortgage: data.mortgage }">OK</button>
+            <button mat-raised-button (click)="dialogRef.close()">Cancel</button>
+        </div>
+    </td></tr>
+</table>
