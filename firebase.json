@@ -1,0 +1,17 @@
+{
+  "hosting": {
+    "site": "mortgage-payoff-tracker",
+    "public": "dist/mortgage-payoff-tracker",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}
