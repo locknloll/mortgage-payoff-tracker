@@ -1,0 +1,12 @@
+table {
+    margin: 50px 50px 50px 41px;
+    width: calc(100% - 600px);
+    float: left;
+}
+
+.mortgage-info-card {
+    margin: 50px 25px 50px 50px;
+    max-width: 400px;
+    width: calc(100% - 400px);
+    float: left;
+}
