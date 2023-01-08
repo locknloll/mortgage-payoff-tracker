@@ -4,6 +4,8 @@ import { Payment } from './payment';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { MatDialog } from '@angular/material/dialog';
 import { MortgageInfoDialogComponent, MortgageInfoDialogResult } from './mortgage-info-dialog/mortgage-info-dialog.component';
+import { PaymentDialogComponent, PaymentDialogResult } from './payment-dialog/payment-dialog.component';
+import { Timestamp } from 'firebase/firestore';
 
 @Component({
   selector: 'app-root',
@@ -15,16 +17,65 @@ export class AppComponent {
 
   mortgageInfo: any = {}
   hasMortgageInfo: boolean = false;
-
+  displayedColumns = [
+    'paymentDate',
+    'paymentAmount',
+    'principalAmount',
+    'interestAmount',
+    'escrowAmount',
+    'remainingBalance',
+    'action'
+  ];
+  itemizedPayments: any[] = [];
   payments: Payment[] = []
 
   constructor(private store: AngularFirestore,
               private dialog: MatDialog) {
-    this.calculatePayments(this.payments);
     this.getMortgageInfo().subscribe((settings: any) => {
       this.mortgageInfo = (settings === undefined) ? {} : settings;
       this.hasMortgageInfo = (JSON.stringify(this.mortgageInfo) !== '{}');
+
+      this.getPayments().subscribe((payments: Payment[]) => {
+        this.itemizedPayments = this.calculatePayments(payments);
+      })
     })
+  }
+
+  getPayments(): Observable<Payment[]> {
+    return this.store.collection('payment', ref => ref.orderBy('paymentDate'))
+      .valueChanges({ idField: 'id' }) as Observable<Payment[]>;
+  }
+
+  newPayment(): void {
+    const dialogRef = this.dialog.open(PaymentDialogComponent, {
+      width: '350px',
+      data: { payment: {} },
+    });
+    dialogRef.afterClosed()
+      .subscribe((result: PaymentDialogResult | undefined) => {
+        if (!result) {
+          return;
+        }
+        this.store.collection('payment').add(result.payment);
+      })
+  }
+
+  editPayment(payment: Payment): void {
+    const dialogRef = this.dialog.open(PaymentDialogComponent, {
+      width: '350px',
+      data: { payment },
+    });
+    dialogRef.afterClosed()
+      .subscribe((result: PaymentDialogResult | undefined) => {
+        if (!result) {
+          return;
+        }
+        this.store.collection('payment').doc(payment.id).update(payment);
+      })
+  }
+
+  deletePayment(id: string) {
+    this.store.collection('payment').doc(id).delete();
   }
 
   getMortgageInfo(): Observable<any> {
@@ -59,9 +110,10 @@ export class AppComponent {
       const interestAmount = currentPrincipal * this.mortgageInfo.interestRate / 12;
       const principalAmount = (pmtAmt - interestAmount - this.mortgageInfo.escrow);
       currentPrincipal -= principalAmount;
+      let paymentDateMillis = (p.paymentDate as Timestamp).toMillis();
       const itemizedPayment = {
         id: p.id,
-        paymentDate: p.paymentDate,
+        paymentDate: new Date(paymentDateMillis),
         escrowAmount: this.mortgageInfo.escrow,
         paymentAmount: p.paymentAmount,
         interestAmount: interestAmount,

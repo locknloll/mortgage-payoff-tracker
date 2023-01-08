@@ -1,5 +1,8 @@
+
+import { Timestamp } from 'firebase/firestore';
+
 export interface Payment {
     id?: string;
-    paymentDate: Date;
+    paymentDate: Timestamp | Date;
     paymentAmount: number;
 }
